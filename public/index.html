@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Publisher</title>
+
+</head>
+<body>
+
+<h1 class="text-3xl text-center font-bold mb-4">Latest News</h1>
+
+<div id="news-list" class="flex"> </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+$(document).ready(function() {
+    // Sample news data (replace with your actual data source)
+    var newsData = [
+        { title: "Car Accident", date: "2023-12-15", desc:"Car accident in the neighbourhood has created waves" },
+        { title: "New Year", date: "2023-12-12",desc:"Great new year celebration in gokuldham society. Citizens happy." },
+        { title: "New York skyline", date: "2023-12-10",desc:"New york one step closer to getting drowned due to rising sea levels." }
+    ];
+
+    // Create news items dynamically
+    $.each(newsData, function(index, news) {
+        var newsItem = $('<div style="background-image: url(https://media.istockphoto.com/id/1399559286/photo/high-tech-city-skyline-hologram-3d-rendering.jpg?s=612x612&w=0&k=20&c=pJteVxYHed9REVqJNDK8SnFlcWuRtvvdKuEsw7yj1Ew=);width:300px;" class="p-4 w-[100em] m-4 text-white rounded-lg shadow-md"></div>');
+        $('<h2 class="text-xl text-gray-100 text-bold  mb-2">' + news.title + '</h2>').appendTo(newsItem);
+        $('<h2 class="text-sm italic  mb-2">' + news.desc + '</h2>').appendTo(newsItem);
+        $('<p class="text-gray-500 text-xs text-right">' + news.date + '</p>').appendTo(newsItem);
+        $('#news-list').append(newsItem);
+    });
+});
+</script>
+
+<div class="flex">
+<div  class="lg:fixed top-0 right-0 w-[300px] h-[250px] border bg-gray-200 rounded-md m-2 text-center">Ad 300x250
+   <a id="300Click" href="/" >  <img id="300img" src="" alt="ad" /></a>
+</div>
+<div class="w-[336px] h-[280px] border bg-gray-200 rounded-md m-2 text-center">Ad 336x280</div>
+<div class="w-[320px] h-[100px] border bg-gray-200 rounded-md m-2 text-center">Ad 320x100</div>
+<script>
+     
+          $("#adBtn").ready(()=>{
+               $.get("/ads",(data,status)=>{
+                  $("#300img").attr("src",data.content[0].extra.decisions.div0[0].contents[0].data.imageUrl)
+                  $("#300Click").attr("href",data.content[0].extra.decisions.div0[0].clickUrl)
+                    console.log(data.content[0].extra.decisions);
+               })
+          });
+     
+</script>
+
+</div>
+</body>
+</html>

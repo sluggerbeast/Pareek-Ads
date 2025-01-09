@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Kevel Decision API - JavaScript Request</title>
+    <script type="text/javascript" src="https://unpkg.com/@adzerk/decision-sdk/dist/adzerk-decision-sdk.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+  $("button").click(function(){
+    $.get("demo_test.asp", function(data, status){
+      alert("Data: " + data + "\nStatus: " + status);
+    });
+  });
+});
+      requestNativeAd = function() {
+        // Demo network, site, and ad type IDs; find your own via the Kevel UI!
+        let client = new AdzerkDecisionSdk.Client({
+          networkId: 23,
+          siteId: 667480
+        });
+
+        let request = {
+          placements: [{
+            adTypes: [5]
+          }]
+        };
+
+        client.decisions.get(request).then(response => {
+          let decision = response.decisions.div0[0];
+
+          // Inject ad contents into page
+          $("#div0").replaceWith(decision.contents[0].body);
+          $("#response").text(JSON.stringify(response));
+          $("#clickUrl").text(decision.clickUrl);
+
+          // Record the impression
+          client.pixels.fire({
+            url: decision.impressionUrl
+          });
+
+        }).catch(error => {
+          console.log("ERROR!", error.toString());
+        });
+      };
+    </script>
+  </head>
+
+  <body onload="requestNativeAd()">
+    <h1>Kevel Native Ad Request</h1>
+
+    <p>Press the button to make an ad request, record the impression, and display both the internal JSON and HTML payload of the response. The response includes data like Impression URL, Click URL, Campaign ID, Metadata, and more. (Note: May not work if you're using an ad blocker).</p>
+
+    <button type="button" onclick="requestNativeAd()">Request Ad</button>
+
+    <hr />
+
+    <h4>Image:</h4>
+    <div id="div0">
+      <code>(Nothing yet; please click the button!)</code>
+    </div>
+
+    <h4>JSON Response:</h4>
+    <code id="response">(Nothing yet; please click the button!)</code>
+
+    <h4>Click URL:</h4>
+    <code id="clickUrl">(Nothing yet; please click the button!)</code>
+  </body>
+</html>
